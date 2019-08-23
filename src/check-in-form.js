@@ -21,10 +21,8 @@ export default class CheckInForm extends Component {
     console.log({
       password: this.state.password,
       confirmPassword: this.state.confirmPassword
-    })
-    if (this.state.password === this.state.confirmPassword) {
-      this.setState({isPasswordsMatch: true})
-    }
+    });
+    return this.state.password === this.state.confirmPassword;
   }
 
   handleUserInput = (e) => {
@@ -33,7 +31,6 @@ export default class CheckInForm extends Component {
     this.setState({[name]: value}, 
                   () => { this.validateField(name, value); this.checkPasswordsMatch() })
                   // console.log({[name]: value});
-    this.checkPasswordsMatch();
   }
 
   validateField(fieldName, value) {
@@ -125,7 +122,7 @@ export default class CheckInForm extends Component {
             </div>
             <button type='submit'
               className='btn btn-primary mt-1'
-              disabled={!(this.state.emailValid && this.state.passwordValid && this.checkPasswordsMatch())}>
+              disabled={!(this.state.emailValid && this.state.passwordValid)}>
               Submit
             </button>
           </form>
