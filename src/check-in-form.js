@@ -29,7 +29,7 @@ export default class CheckInForm extends Component {
     const name = e.target.name;
     const value = e.target.value;
     this.setState({[name]: value}, 
-                  () => { this.validateField(name, value); this.checkPasswordsMatch() })
+                  () => { this.validateField(name, value)})
                   // console.log({[name]: value});
   }
 
@@ -37,14 +37,16 @@ export default class CheckInForm extends Component {
     let fieldValidationErrors = this.state.formErrors;
     let emailValid = this.state.emailValid;
     let passwordValid = this.state.passwordValid;
+    let isPasswordsMatch = this.state.isPasswordsMatch;
   switch(fieldName) {
       case 'email':
         emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
         fieldValidationErrors.email = emailValid ? '' : ' is invalid';
         break;
       case 'password':
+      case 'confirmPassword':
         passwordValid = value.length >= 6 && value.length <= 16 && this.checkPasswordsMatch();
-        fieldValidationErrors.password = passwordValid ? '': ' incorrect password';
+        fieldValidationErrors.password = passwordValid ? '': ' incorrect';
         break;
       default:
         break;
@@ -53,14 +55,6 @@ export default class CheckInForm extends Component {
                     emailValid: emailValid,
                     passwordValid: passwordValid});
   }
-  // validateForm() {
-  //   this.setState({formValid: this.state.emailValid &&
-  //                             this.state.passwordValid});
-  // }
-
-  // isFormValid() {
-  //   return this.state.emailValid && this.state.passwordValid && this.state.isPasswordsMatch;
-  // }
 
   render () {
     return (
