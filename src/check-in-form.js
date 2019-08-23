@@ -1,18 +1,29 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
-import React from 'react';
+import React, { Component } from 'react';
 import { FormErrors } from './form-errors';
 
-export default class CheckInForm extends React.Component {
+export default class CheckInForm extends Component {
 
   constructor (props) {
     super(props);
     this.state = {
       email: '',
       password: '',
+      confirmPassword: '',
       formErrors: {email: '', password: ''},
       emailValid: false,
       passwordValid: false,
-      formValid: false
+      isPasswordsMatch: false,
+    }
+  }
+
+  checkPasswordsMatch() {
+    console.log({
+      password: this.state.password,
+      confirmPassword: this.state.confirmPassword
+    })
+    if (this.state.password === this.state.confirmPassword) {
+      this.setState({isPasswordsMatch: true})
     }
   }
 
@@ -20,7 +31,9 @@ export default class CheckInForm extends React.Component {
     const name = e.target.name;
     const value = e.target.value;
     this.setState({[name]: value}, 
-                  () => { this.validateField(name, value) });
+                  () => { this.validateField(name, value); this.checkPasswordsMatch() })
+                  // console.log({[name]: value});
+    this.checkPasswordsMatch();
   }
 
   validateField(fieldName, value) {
@@ -33,21 +46,24 @@ export default class CheckInForm extends React.Component {
         fieldValidationErrors.email = emailValid ? '' : ' is invalid';
         break;
       case 'password':
-        passwordValid = value.length >= 6;
-        fieldValidationErrors.password = passwordValid ? '': ' is too short';
+        passwordValid = value.length >= 6 && value.length <= 16 && this.checkPasswordsMatch();
+        fieldValidationErrors.password = passwordValid ? '': ' incorrect password';
         break;
       default:
         break;
     }
     this.setState({formErrors: fieldValidationErrors,
                     emailValid: emailValid,
-                    passwordValid: passwordValid
-                  }, this.validateForm);
+                    passwordValid: passwordValid});
   }
-  validateForm() {
-    this.setState({formValid: this.state.emailValid &&
-                              this.state.passwordValid});
-  }
+  // validateForm() {
+  //   this.setState({formValid: this.state.emailValid &&
+  //                             this.state.passwordValid});
+  // }
+
+  // isFormValid() {
+  //   return this.state.emailValid && this.state.passwordValid && this.state.isPasswordsMatch;
+  // }
 
   render () {
     return (
@@ -84,7 +100,7 @@ export default class CheckInForm extends React.Component {
                 value={this.state.password}
                 onChange={this.handleUserInput}
               />
-              <small id="emailHelp" className='form-text text-muted'>Numbers and letters from 6 to 16 characters.</small>
+              <small id="emailHelp" className='form-text text-muted'>Numbers and letters from 6 to 16 characters. One letter and one number is required.</small>
             </div>
             <div className='form-group'>
               <label htmlFor='passwordCheckInput'>Confirm password</label>
@@ -94,6 +110,8 @@ export default class CheckInForm extends React.Component {
                 className='form-control'
                 id='passwordCheckInput'
                 placeholder='Password'
+                value={this.state.confirmPassword}
+                onChange={this.handleUserInput}
               />
             </div>
             <div className='form-check'>
@@ -107,7 +125,7 @@ export default class CheckInForm extends React.Component {
             </div>
             <button type='submit'
               className='btn btn-primary mt-1'
-              disabled={!this.state.formValid}>
+              disabled={!(this.state.emailValid && this.state.passwordValid && this.checkPasswordsMatch())}>
               Submit
             </button>
           </form>
