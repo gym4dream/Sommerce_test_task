@@ -7,6 +7,7 @@ export default class CheckInForm extends Component {
   constructor (props) {
     super(props);
     this.state = {
+      login: '',
       email: '',
       password: '',
       confirmPassword: '',
@@ -17,6 +18,14 @@ export default class CheckInForm extends Component {
     }
   }
 
+  handleUserInput = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+    this.setState({[name]: value}, 
+                  () => { this.validateField(name, value)})
+                  console.log({[name]: value});
+  }
+
   checkPasswordsMatch() {
     console.log({
       password: this.state.password,
@@ -25,19 +34,10 @@ export default class CheckInForm extends Component {
     return this.state.password === this.state.confirmPassword;
   }
 
-  handleUserInput = (e) => {
-    const name = e.target.name;
-    const value = e.target.value;
-    this.setState({[name]: value}, 
-                  () => { this.validateField(name, value)})
-                  // console.log({[name]: value});
-  }
-
   validateField(fieldName, value) {
     let fieldValidationErrors = this.state.formErrors;
     let emailValid = this.state.emailValid;
     let passwordValid = this.state.passwordValid;
-    let isPasswordsMatch = this.state.isPasswordsMatch;
   switch(fieldName) {
       case 'email':
         emailValid = value.match(/^([\w.%+-]+)@([\w-]+\.)+([\w]{2,})$/i);
@@ -56,16 +56,39 @@ export default class CheckInForm extends Component {
                     passwordValid: passwordValid});
   }
 
+  addNewUserInDB = () => {
+    let userName = this.state.login;
+    let users = JSON.parse(localStorage.getItem('Users'));
+    if (!users) {
+      users = {}
+    }
+    if (!users[userName]) {
+      users[userName] = {
+        login: this.state.login,
+        email: this.state.email,
+        password: this.state.password
+      }
+      localStorage.setItem('Users', JSON.stringify(users));
+    }
+  }
+
   render () {
     return (
       <div className='vh-100 row justify-content-center align-items-center'>
           <form className='col-6 col-lg-3'>
             <div className='form-group'>
               <label htmlFor="loginInput">Login</label>
-              <div className="panel panel-default">
+              <div className="small panel panel-default text-danger">
                 <FormErrors formErrors={this.state.formErrors} />
               </div>
-              <input type="text" name='login' required className='form-control' id='loginInput' placeholder='Enter login' />
+              <input type="text"
+                name='login'
+                required
+                className='form-control'
+                id='loginInput'
+                placeholder='Enter login'
+                onChange={this.handleUserInput}
+              />
             </div>
             <div className='form-group'>
               <label htmlFor="emailInput">Email</label>
@@ -116,11 +139,12 @@ export default class CheckInForm extends Component {
             </div>
             <button type='submit'
               className='btn btn-primary mt-1'
-              disabled={!(this.state.emailValid && this.state.passwordValid)}>
+              disabled={!(this.state.emailValid && this.state.passwordValid)}
+              onClick={this.addNewUserInDB}>
               Submit
             </button>
           </form>
       </div>
     )
-  }
-};
+  };
+}
