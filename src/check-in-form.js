@@ -75,9 +75,9 @@ export default class CheckInForm extends Component {
   render () {
     return (
       <div className='vh-100 row justify-content-center align-items-center'>
-          <form className='col-6 col-lg-3'>
+          <form className='col-6'>
             <div className='form-group'>
-              <label htmlFor="loginInput">Login</label>
+              <label htmlFor="checkinInput">Login</label>
               <div className="small panel panel-default text-danger">
                 <FormErrors formErrors={this.state.formErrors} />
               </div>
@@ -85,7 +85,7 @@ export default class CheckInForm extends Component {
                 name='login'
                 required
                 className='form-control'
-                id='loginInput'
+                id='checkinInput'
                 placeholder='Enter login'
                 onChange={this.handleUserInput}
               />
@@ -141,7 +141,7 @@ export default class CheckInForm extends Component {
               className='btn btn-primary mt-1'
               disabled={!(this.state.emailValid && this.state.passwordValid)}
               onClick={this.addNewUserInDB}>
-              Submit
+              Sign up
             </button>
           </form>
       </div>

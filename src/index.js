@@ -2,8 +2,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import App from './app';
-import CheckInForm from './check-in-form';
+import LogInForm from './log-in-form';
 
-ReactDOM.render(<CheckInForm />,
+ReactDOM.render(<LogInForm />,
   document.getElementById('root'));
 
