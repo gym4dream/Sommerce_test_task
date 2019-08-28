@@ -11,17 +11,74 @@ export default class LogInForm extends Component {
     }
   }
 
-  handleUserInput = (e) => {
-    const name = e.target.name;
+  checkLoginMatch = (e) => {
+    let isLoginExists = false;
+    // const name = e.target.name;
+    // const value = e.target.value;
+    // this.setState({[name]: value})
     const value = e.target.value;
-    this.setState({[name]: value})
-                  console.log({[name]: value});
+
+    const users = JSON.parse(localStorage['Users']);
+    let logins = [];
+
+    for (let key in users) {
+      logins.push(users[key].login)
+    }
+
+    logins.forEach((i) => {
+      if (i === value) {
+        console.log(i)
+        isLoginExists = true;
+        return isLoginExists;
+      }
+    })
+
+    console.log(isLoginExists);
   }
 
-  getUsers() {
-    const users = localStorage.getItem('Users');
-    console.log(users);
+  checkPasswordMatch = (e) => {
+    let isPasswordExists = false;
+    const value = e.target.value;
+
+    const users = JSON.parse(localStorage['Users']);
+    let passwords = [];
+
+    for (let key in users) {
+      passwords.push(users[key].password)
+    }
+
+    passwords.forEach((i) => {
+      if (i === value) {
+        console.log(i)
+        isPasswordExists = true;
+        return isPasswordExists;
+      }
+    })
+
+    console.log(isPasswordExists);
   }
+
+  // getUsers = () => {
+  //   console.log('Логин в функции getUsers: ' + this.state.login)
+  //   let isLoginExists = false;
+  //   const enteredLogin = this.state.login;
+  //   const users = JSON.parse(localStorage['Users']);
+  //   let logins = [];
+
+  //   for (let key in users) {
+  //     logins.push(users[key].login)
+  //   }
+  //   // console.log(logins)
+
+  //   logins.forEach((i) => {
+  //     if (i == enteredLogin) {
+  //       isLoginExists = true;
+  //     }
+  //     return isLoginExists;
+  //   })
+
+  //   console.log(isLoginExists);
+  // }
 
   render () {
     return (
@@ -35,7 +92,7 @@ export default class LogInForm extends Component {
                 className='form-control'
                 id='loginInput'
                 placeholder='Enter login'
-                onChange={this.handleUserInput}
+                onChange={this.checkLoginMatch}
               />
             </div>
             <div className='form-group'>
@@ -46,7 +103,7 @@ export default class LogInForm extends Component {
                 className='form-control'
                 id='loginPasswordInput'
                 placeholder='Password'
-                onChange={this.handleUserInput}
+                onChange={this.checkPasswordMatch}
               />
             </div>
             <button type='submit'
