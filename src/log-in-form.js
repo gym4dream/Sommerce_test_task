@@ -13,9 +13,7 @@ export default class LogInForm extends Component {
 
   checkLoginMatch = (e) => {
     let isLoginExists = false;
-    // const name = e.target.name;
-    // const value = e.target.value;
-    // this.setState({[name]: value})
+    let enteredLogin = '';
     const value = e.target.value;
 
     const users = JSON.parse(localStorage['Users']);
@@ -28,13 +26,17 @@ export default class LogInForm extends Component {
     logins.forEach((i) => {
       if (i === value) {
         console.log(i)
+        enteredLogin = i;
         isLoginExists = true;
         return isLoginExists;
       }
+
+      this.setState({login: enteredLogin})
     })
 
-    console.log(isLoginExists);
-  }
+      console.log(isLoginExists);
+      console.log(this.state.login)
+    }
 
   checkPasswordMatch = (e) => {
     let isPasswordExists = false;
@@ -57,28 +59,6 @@ export default class LogInForm extends Component {
 
     console.log(isPasswordExists);
   }
-
-  // getUsers = () => {
-  //   console.log('Логин в функции getUsers: ' + this.state.login)
-  //   let isLoginExists = false;
-  //   const enteredLogin = this.state.login;
-  //   const users = JSON.parse(localStorage['Users']);
-  //   let logins = [];
-
-  //   for (let key in users) {
-  //     logins.push(users[key].login)
-  //   }
-  //   // console.log(logins)
-
-  //   logins.forEach((i) => {
-  //     if (i == enteredLogin) {
-  //       isLoginExists = true;
-  //     }
-  //     return isLoginExists;
-  //   })
-
-  //   console.log(isLoginExists);
-  // }
 
   render () {
     return (
