@@ -20,11 +20,11 @@ export default class LogInForm extends Component {
     const name = e.target.name;
     const value = e.target.value;
     this.setState({[name]: value});
+    console.log(name, value);
   }
 
   checkLoginAndPasswordMatch = (e) => {
     e.preventDefault()
-    let dataError = false;
     let isLoginAndPasswordCorrect = false;
     const enteredLogin = this.state.login;
     const enteredPassword =  this.state.password;
@@ -34,13 +34,15 @@ export default class LogInForm extends Component {
 
     for (let key in users) {
       if (key === enteredLogin) {
-        if (key.password === enteredPassword) {
+        console.log(key)
+        if (users[key].password === enteredPassword) {
           isLoginAndPasswordCorrect = true;
-          return isLoginAndPasswordCorrect;
+          this.setState({dataError: false});
+          return isLoginAndPasswordCorrect
         }
       } else {
-        dataError = true;
-        this.setState({dataError: true})
+        this.setState({dataError: true});
+        this.setState({password: ''})
       }
     }
   }
