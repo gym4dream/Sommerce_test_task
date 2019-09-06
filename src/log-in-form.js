@@ -73,6 +73,7 @@ export default class LogInForm extends Component {
               className='form-control'
               id='loginPasswordInput'
               placeholder='Password'
+              value={this.state.password}
               onChange={this.handleUserInput}
             />
           </div>
